@@ -306,7 +306,7 @@ class fcafterbuyapi {
                             <Stock>1</Stock>
                             <Discontinued>1</Discontinued>
                             <MergeStock>1</MergeStock>
-                            <SellingPrice>' . $oArt->SellingPrice . '</SellingPrice>
+                            <SellingPrice>' . str_replace('.',',',$oArt->SellingPrice) . '</SellingPrice>
                             <ImageSmallURL>'.$oArt->ImageSmallURL.'</ImageSmallURL>
                             <ImageLargeURL>'.$oArt->ImageLargeURL.'</ImageLargeURL>
                             <ProductBrand>'.$oArt->ProductBrand.'</ProductBrand>
@@ -315,7 +315,7 @@ class fcafterbuyapi {
                             <CanonicalUrl>'.$oArt->CanonicalUrl.'</CanonicalUrl>
                             <ManufacturerPartNumber>'.$oArt->ManufacturerPartNumber.'</ManufacturerPartNumber>
                             <Keywords>'.$oArt->Keywords.'</Keywords>
-                            <BuyingPrice>'.$oArt->BuyingPrice.'</BuyingPrice>
+                            <BuyingPrice>'.str_replace('.',',',$oArt->BuyingPrice).'</BuyingPrice>
                             <Weight>'.$oArt->Weight.'</Weight>
         ';
         if ($oArt->EAN != "") {
