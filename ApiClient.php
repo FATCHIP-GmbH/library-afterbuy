@@ -40,6 +40,7 @@ class ApiClient
     /**
      * @param Product[]|Product $products
      * @return mixed
+     * @throws \Exception
      */
     public function updateShopProducts($products)
     {
@@ -52,17 +53,29 @@ class ApiClient
                     "not an instance of \Fatchip\Afterbuy\Types\Product");
             }
         }
-        $request = $this->buildRequest('UpdateShopProducts');
-        $request['Products'] = ['Product' => $products];
-        return $this->sendRequest($request);
+        $request = $this->buildRequest('UpdateShopProducts', ['Products' => ['Product' => $products]]);
+        $response = $this->sendRequest($request);
+        if ($response['CallStatus'] !== 'Success') {
+            if ($response['Result']['ErrorList']['Error']['ErrorCode']) {
+                throw new \Exception(
+                    $response['Result']['ErrorList']['Error']['ErrorDescription'],
+                    $response['Result']['ErrorList']['Error']['ErrorCode']
+                );
+            } else {
+                throw new \Exception("An unknown error occured during API communication.");
+            }
+        }
+        return $response;
     }
 
     /**
      * @param string $callName
+     * @param array $content
      * @param string $errorLanguage
+     * @param int $detailLevel
      * @return array
      */
-    protected function buildRequest($callName, $errorLanguage = 'DE')
+    protected function buildRequest($callName, $content, $errorLanguage = 'EN', $detailLevel = 0)
     {
         $params = [
             'PartnerID' => $this->afterbuyPartnerId,
@@ -71,10 +84,10 @@ class ApiClient
             'UserPassword' => $this->afterbuyUserPassword,
             'ErrorLanguage' => $errorLanguage,
             'CallName' => $callName,
-            'DetailLevel' => 0,
+            'DetailLevel' => $detailLevel,
         ];
-        $request = ['AfterbuyGlobal' => $params];
-        return $request;
+        $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
+        return $this->serializer->normalize($request);
     }
 
     /**
@@ -83,7 +96,7 @@ class ApiClient
      */
     protected function sendRequest($request)
     {
-        $request = $this->serializer->serialize($request, 'request/xml');
+        $request = $this->serializer->encode($request, 'request/xml');
         $ch = curl_init($this->afterbuyAbiUrl);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -93,7 +106,7 @@ class ApiClient
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
         curl_close($ch);
-        return $response;
+        return $this->serializer->decode($response, 'response/xml');
     }
 
     /**
@@ -145,12 +158,6 @@ class ApiClient
      * @var string
      */
     protected $afterbuyUserPassword = "";
-
-    /**
-     * ID for the last requested order
-     * @var string
-     */
-    protected $lastOrderId = null;
 
     /**
      * Serializer for API communication

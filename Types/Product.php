@@ -2,101 +2,189 @@
 
 namespace Fatchip\Afterbuy\Types;
 
+use Fatchip\Afterbuy\Types\Product\AddAttributes;
+use Fatchip\Afterbuy\Types\Product\AddBaseProducts;
+use Fatchip\Afterbuy\Types\Product\AddCatalogs;
+use Fatchip\Afterbuy\Types\Product\AdditionalDescriptionFields;
+use Fatchip\Afterbuy\Types\Product\PartsFitment;
+use Fatchip\Afterbuy\Types\Product\ProductIdent;
+use Fatchip\Afterbuy\Types\Product\ProductPictures;
+use Fatchip\Afterbuy\Types\Product\ScaledDiscounts;
+use Fatchip\Afterbuy\Types\Product\Skus;
+
 class Product
 {
-    // --- Produktidentifizierung
+    /** @var ProductIdent */
+    private $ProductIdent;
 
-    /** @var ProductIdent */ private $ProductIdent;
+    /** @var float */
+    private $Anr;
+    /** @var string */
+    private $EAN;
+    /** @var int */
+    private $FooterID;
+    /** @var int */
+    private $HeaderID;
+    /** @var string */
+    private $Name;
+    /** @var string */
+    private $ManufacturerPartNumber;
+    /** @var string */
+    private $ShortDescription;
+    /** @var string */
+    private $Memo;
+    /** @var string */
+    private $Description;
+    /** @var string */
+    private $Keywords;
+    /** @var int */
+    private $Quantity;
+    /** @var int */
+    private $AuctionQuantity;
+    /** @var bool */
+    private $Stock;
+    /** @var bool */
+    private $Discontinued;
+    /** @var bool */
+    private $MergeStock;
+    /** @var float */
+    private $UnitOfQuantity;
+    /** @var string */
+    private $BasepriceFactor;
+    /** @var int */
+    private $MinimumStock;
+    /** @var float */
+    private $SellingPrice;
+    /** @var float */
+    private $BuyingPrice;
+    /** @var float */
+    private $DealerPrice;
+    /** @var int */
+    private $Level;
+    /** @var int */
+    private $Position;
+    /** @var bool */
+    private $TitleReplace;
+    /** @var float */
+    private $TaxRate;
+    /** @var float */
+    private $Weight;
+    /** @var string */
+    private $Stocklocation_1;
+    /** @var string */
+    private $Stocklocation_2;
+    /** @var string */
+    private $Stocklocation_3;
+    /** @var string */
+    private $Stocklocation_4;
+    /** @var string */
+    private $CountryOfOrigin;
+    /** @var string */
+    private $SearchAlias;
+    /** @var bool */
+    private $Froogle;
+    /** @var bool */
+    private $Kelkoo;
+    /** @var string */
+    private $ShippingGroup;
+    /** @var string */
+    private $ShopShippingGroup;
+    /** @var int */
+    private $CrossCatalogID;
+    /** @var string */
+    private $FreeValue1;
+    /** @var string */
+    private $FreeValue2;
+    /** @var string */
+    private $FreeValue3;
+    /** @var string */
+    private $FreeValue4;
+    /** @var string */
+    private $FreeValue5;
+    /** @var string */
+    private $FreeValue6;
+    /** @var string */
+    private $FreeValue7;
+    /** @var string */
+    private $FreeValue8;
+    /** @var string */
+    private $FreeValue9;
+    /** @var string */
+    private $FreeValue10;
+    /** @var string */
+    private $DeliveryTime;
+    /** @var string */
+    private $ImageSmallURL;
+    /** @var string */
+    private $ImageLargeURL;
+    /** @var string */
+    private $ImageName;
+    /** @var string */
+    private $ImageSource;
+    /** @var string */
+    private $ManufacturerStandardProductIDType;
+    /** @var string */
+    private $ManufacturerStandardProductIDValue;
+    /** @var string */
+    private $ProductBrand;
+    /** @var string */
+    private $CustomsTariffNumber;
+    /** @var string */
+    private $GoogleProductCategory;
+    /** @var int */
+    private $Condition;
+    /** @var string */
+    private $Pattern;
+    /** @var string */
+    private $Material;
+    /** @var string */
+    private $ItemColor;
+    /** @var string */
+    private $ItemSize;
+    /** @var string */
+    private $CanonicalUrl;
+    /** @var int */
+    private $EnergyClass;
+    /** @var string */
+    private $EnergyClassPictureUrl;
+    /** @var int */
+    private $AgeGroup;
+    /** @var int */
+    private $Gender;
 
-    // --- Aktualisierbare Werte
-
-    /** @var Float */ private $Anr;
-    /** @var String */ private $EAN;
-    /** @var Integer */ private $FooterID;
-    /** @var Integer */ private $HeaderID;
-    /** @var String */ private $Name;
-    /** @var String */ private $ManufacturerPartNumber;
-    /** @var String */ private $ShortDescription;
-    /** @var String */ private $Memo;
-    /** @var String */ private $Description;
-    /** @var String */ private $Keywords;
-    /** @var Integer */ private $Quantity;
-    /** @var Integer */ private $AuctionQuantity;
-    /** @var Boolean */ private $Stock;
-    /** @var Boolean */ private $Discontinued;
-    /** @var Boolean */ private $MergeStock;
-    /** @var Float */ private $UnitOfQuantity;
-    /** @var String */ private $BasepriceFactor;
-    /** @var Integer */ private $MinimumStock;
-    /** @var Float */ private $SellingPrice;
-    /** @var Float */ private $BuyingPrice;
-    /** @var Float */ private $DealerPrice;
-    /** @var Integer */ private $Level;
-    /** @var Integer */ private $Position;
-    /** @var Boolean */ private $TitleReplace;
-    /** @var Float */ private $TaxRate;
-    /** @var Float */ private $Weight;
-    /** @var String */ private $Stocklocation_1;
-    /** @var String */ private $Stocklocation_2;
-    /** @var String */ private $Stocklocation_3;
-    /** @var String */ private $Stocklocation_4;
-    /** @var String */ private $CountryOfOrigin;
-    /** @var String */ private $SearchAlias;
-    /** @var Boolean */ private $Froogle;
-    /** @var Boolean */ private $Kelkoo;
-    /** @var String */ private $ShippingGroup;
-    /** @var String */ private $ShopShippingGroup;
-    /** @var Integer */ private $CrossCatalogID;
-    /** @var String */ private $FreeValue1;
-    /** @var String */ private $FreeValue2;
-    /** @var String */ private $FreeValue3;
-    /** @var String */ private $FreeValue4;
-    /** @var String */ private $FreeValue5;
-    /** @var String */ private $FreeValue6;
-    /** @var String */ private $FreeValue7;
-    /** @var String */ private $FreeValue8;
-    /** @var String */ private $FreeValue9;
-    /** @var String */ private $FreeValue10;
-    /** @var String */ private $DeliveryTime;
-    /** @var String */ private $ImageSmallURL;
-    /** @var String */ private $ImageLargeURL;
-    /** @var String */ private $ImageName;
-    /** @var String */ private $ImageSource;
-    /** @var String */ private $ManufacturerStandardProductIDType;
-    /** @var String */ private $ManufacturerStandardProductIDValue;
-    /** @var String */ private $ProductBrand;
-    /** @var String */ private $CustomsTariffNumber;
-    /** @var String */ private $GoogleProductCategory;
-    /** @var Integer */ private $Condition;
-    /** @var String */ private $Pattern;
-    /** @var String */ private $Material;
-    /** @var String */ private $ItemColor;
-    /** @var String */ private $ItemSize;
-    /** @var String */ private $CanonicalUrl;
-    /** @var Integer */ private $EnergyClass;
-    /** @var String */ private $EnergyClassPictureUrl;
-    /** @var Integer */ private $AgeGroup;
-    /** @var Integer */ private $Gender;
-
-    /** @var Skus */ private $Skus;
-    /** @var AddCatalogs */ private $AddCatalogs;
-    /** @var AddAttributes */ private $AddAttributes;
-    /** @var AddBaseProducts */ private $AddBaseProducts;
-    /** @var PartsFitment */ private $PartsFitment;
-    /** @var ProductPictures */ private $ProductPictures;
-    /** @var ScaledDiscounts */ private $ScaledDiscounts;
-    /** @var AdditionalDescriptionFields */ private $AdditionalDescriptionFields;
+    /** @var Skus */
+    private $Skus;
+    /** @var AddCatalogs */
+    private $AddCatalogs;
+    /** @var AddAttributes */
+    private $AddAttributes;
+    /** @var AddBaseProducts */
+    private $AddBaseProducts;
+    /** @var PartsFitment */
+    private $PartsFitment;
+    /** @var ProductPictures */
+    private $ProductPictures;
+    /** @var ScaledDiscounts */
+    private $ScaledDiscounts;
+    /** @var AdditionalDescriptionFields */
+    private $AdditionalDescriptionFields;
 
     /**
      * Product constructor.
-     * @param ProductIdent $ProductIdent
+     * @param ProductIdent|int $ProductIdent
      */
     public function __construct($ProductIdent = null)
     {
-        if ($ProductIdent) {
+        if (empty($ProductIdent)) {
+            $this->ProductIdent = new ProductIdent();
+        } elseif (is_integer($ProductIdent)) {
+            $this->ProductIdent = new ProductIdent($ProductIdent);
+        } elseif ($ProductIdent instanceof ProductIdent) {
             $this->ProductIdent = $ProductIdent;
         } else {
-            $this->ProductIdent = new ProductIdent();
+            throw new \InvalidArgumentException(
+                "Given value for argument 'ProductIdent' is not valid"
+            );
         }
     }
 
@@ -119,7 +207,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getAnr()
     {
@@ -127,7 +215,7 @@ class Product
     }
 
     /**
-     * @param Float $Anr
+     * @param float $Anr
      * @return Product
      */
     public function setAnr($Anr)
@@ -137,7 +225,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getEAN()
     {
@@ -145,7 +233,7 @@ class Product
     }
 
     /**
-     * @param String $EAN
+     * @param string $EAN
      * @return Product
      */
     public function setEAN($EAN)
@@ -191,7 +279,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getName()
     {
@@ -199,7 +287,7 @@ class Product
     }
 
     /**
-     * @param String $Name
+     * @param string $Name
      * @return Product
      */
     public function setName($Name)
@@ -209,7 +297,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getManufacturerPartNumber()
     {
@@ -217,7 +305,7 @@ class Product
     }
 
     /**
-     * @param String $ManufacturerPartNumber
+     * @param string $ManufacturerPartNumber
      * @return Product
      */
     public function setManufacturerPartNumber($ManufacturerPartNumber)
@@ -227,7 +315,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getShortDescription()
     {
@@ -235,7 +323,7 @@ class Product
     }
 
     /**
-     * @param String $ShortDescription
+     * @param string $ShortDescription
      * @return Product
      */
     public function setShortDescription($ShortDescription)
@@ -245,7 +333,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getMemo()
     {
@@ -253,7 +341,7 @@ class Product
     }
 
     /**
-     * @param String $Memo
+     * @param string $Memo
      * @return Product
      */
     public function setMemo($Memo)
@@ -263,7 +351,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getDescription()
     {
@@ -271,7 +359,7 @@ class Product
     }
 
     /**
-     * @param String $Description
+     * @param string $Description
      * @return Product
      */
     public function setDescription($Description)
@@ -281,7 +369,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getKeywords()
     {
@@ -289,7 +377,7 @@ class Product
     }
 
     /**
-     * @param String $Keywords
+     * @param string $Keywords
      * @return Product
      */
     public function setKeywords($Keywords)
@@ -389,7 +477,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getUnitOfQuantity()
     {
@@ -397,7 +485,7 @@ class Product
     }
 
     /**
-     * @param Float $UnitOfQuantity
+     * @param float $UnitOfQuantity
      * @return Product
      */
     public function setUnitOfQuantity($UnitOfQuantity)
@@ -407,7 +495,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getBasepriceFactor()
     {
@@ -415,7 +503,7 @@ class Product
     }
 
     /**
-     * @param String $BasepriceFactor
+     * @param string $BasepriceFactor
      * @return Product
      */
     public function setBasepriceFactor($BasepriceFactor)
@@ -443,7 +531,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getSellingPrice()
     {
@@ -451,7 +539,7 @@ class Product
     }
 
     /**
-     * @param Float $SellingPrice
+     * @param float $SellingPrice
      * @return Product
      */
     public function setSellingPrice($SellingPrice)
@@ -461,7 +549,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getBuyingPrice()
     {
@@ -469,7 +557,7 @@ class Product
     }
 
     /**
-     * @param Float $BuyingPrice
+     * @param float $BuyingPrice
      * @return Product
      */
     public function setBuyingPrice($BuyingPrice)
@@ -479,7 +567,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getDealerPrice()
     {
@@ -487,7 +575,7 @@ class Product
     }
 
     /**
-     * @param Float $DealerPrice
+     * @param float $DealerPrice
      * @return Product
      */
     public function setDealerPrice($DealerPrice)
@@ -551,7 +639,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getTaxRate()
     {
@@ -559,7 +647,7 @@ class Product
     }
 
     /**
-     * @param Float $TaxRate
+     * @param float $TaxRate
      * @return Product
      */
     public function setTaxRate($TaxRate)
@@ -569,7 +657,7 @@ class Product
     }
 
     /**
-     * @return Float
+     * @return float
      */
     public function getWeight()
     {
@@ -577,7 +665,7 @@ class Product
     }
 
     /**
-     * @param Float $Weight
+     * @param float $Weight
      * @return Product
      */
     public function setWeight($Weight)
@@ -587,7 +675,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getStocklocation1()
     {
@@ -595,7 +683,7 @@ class Product
     }
 
     /**
-     * @param String $Stocklocation_1
+     * @param string $Stocklocation_1
      * @return Product
      */
     public function setStocklocation1($Stocklocation_1)
@@ -605,7 +693,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getStocklocation2()
     {
@@ -613,7 +701,7 @@ class Product
     }
 
     /**
-     * @param String $Stocklocation_2
+     * @param string $Stocklocation_2
      * @return Product
      */
     public function setStocklocation2($Stocklocation_2)
@@ -623,7 +711,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getStocklocation3()
     {
@@ -631,7 +719,7 @@ class Product
     }
 
     /**
-     * @param String $Stocklocation_3
+     * @param string $Stocklocation_3
      * @return Product
      */
     public function setStocklocation3($Stocklocation_3)
@@ -641,7 +729,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getStocklocation4()
     {
@@ -649,7 +737,7 @@ class Product
     }
 
     /**
-     * @param String $Stocklocation_4
+     * @param string $Stocklocation_4
      * @return Product
      */
     public function setStocklocation4($Stocklocation_4)
@@ -659,7 +747,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getCountryOfOrigin()
     {
@@ -667,7 +755,7 @@ class Product
     }
 
     /**
-     * @param String $CountryOfOrigin
+     * @param string $CountryOfOrigin
      * @return Product
      */
     public function setCountryOfOrigin($CountryOfOrigin)
@@ -677,7 +765,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getSearchAlias()
     {
@@ -685,7 +773,7 @@ class Product
     }
 
     /**
-     * @param String $SearchAlias
+     * @param string $SearchAlias
      * @return Product
      */
     public function setSearchAlias($SearchAlias)
@@ -731,7 +819,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getShippingGroup()
     {
@@ -739,7 +827,7 @@ class Product
     }
 
     /**
-     * @param String $ShippingGroup
+     * @param string $ShippingGroup
      * @return Product
      */
     public function setShippingGroup($ShippingGroup)
@@ -749,7 +837,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getShopShippingGroup()
     {
@@ -757,7 +845,7 @@ class Product
     }
 
     /**
-     * @param String $ShopShippingGroup
+     * @param string $ShopShippingGroup
      * @return Product
      */
     public function setShopShippingGroup($ShopShippingGroup)
@@ -785,7 +873,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue1()
     {
@@ -793,7 +881,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue1
+     * @param string $FreeValue1
      * @return Product
      */
     public function setFreeValue1($FreeValue1)
@@ -803,7 +891,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue2()
     {
@@ -811,7 +899,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue2
+     * @param string $FreeValue2
      * @return Product
      */
     public function setFreeValue2($FreeValue2)
@@ -821,7 +909,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue3()
     {
@@ -829,7 +917,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue3
+     * @param string $FreeValue3
      * @return Product
      */
     public function setFreeValue3($FreeValue3)
@@ -839,7 +927,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue4()
     {
@@ -847,7 +935,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue4
+     * @param string $FreeValue4
      * @return Product
      */
     public function setFreeValue4($FreeValue4)
@@ -857,7 +945,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue5()
     {
@@ -865,7 +953,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue5
+     * @param string $FreeValue5
      * @return Product
      */
     public function setFreeValue5($FreeValue5)
@@ -875,7 +963,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue6()
     {
@@ -883,7 +971,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue6
+     * @param string $FreeValue6
      * @return Product
      */
     public function setFreeValue6($FreeValue6)
@@ -893,7 +981,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue7()
     {
@@ -901,7 +989,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue7
+     * @param string $FreeValue7
      * @return Product
      */
     public function setFreeValue7($FreeValue7)
@@ -911,7 +999,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue8()
     {
@@ -919,7 +1007,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue8
+     * @param string $FreeValue8
      * @return Product
      */
     public function setFreeValue8($FreeValue8)
@@ -929,7 +1017,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue9()
     {
@@ -937,7 +1025,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue9
+     * @param string $FreeValue9
      * @return Product
      */
     public function setFreeValue9($FreeValue9)
@@ -947,7 +1035,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getFreeValue10()
     {
@@ -955,7 +1043,7 @@ class Product
     }
 
     /**
-     * @param String $FreeValue10
+     * @param string $FreeValue10
      * @return Product
      */
     public function setFreeValue10($FreeValue10)
@@ -965,7 +1053,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getDeliveryTime()
     {
@@ -973,7 +1061,7 @@ class Product
     }
 
     /**
-     * @param String $DeliveryTime
+     * @param string $DeliveryTime
      * @return Product
      */
     public function setDeliveryTime($DeliveryTime)
@@ -983,7 +1071,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getImageSmallURL()
     {
@@ -991,7 +1079,7 @@ class Product
     }
 
     /**
-     * @param String $ImageSmallURL
+     * @param string $ImageSmallURL
      * @return Product
      */
     public function setImageSmallURL($ImageSmallURL)
@@ -1001,7 +1089,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getImageLargeURL()
     {
@@ -1009,7 +1097,7 @@ class Product
     }
 
     /**
-     * @param String $ImageLargeURL
+     * @param string $ImageLargeURL
      * @return Product
      */
     public function setImageLargeURL($ImageLargeURL)
@@ -1019,7 +1107,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getImageName()
     {
@@ -1027,7 +1115,7 @@ class Product
     }
 
     /**
-     * @param String $ImageName
+     * @param string $ImageName
      * @return Product
      */
     public function setImageName($ImageName)
@@ -1037,7 +1125,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getImageSource()
     {
@@ -1045,7 +1133,7 @@ class Product
     }
 
     /**
-     * @param String $ImageSource
+     * @param string $ImageSource
      * @return Product
      */
     public function setImageSource($ImageSource)
@@ -1055,7 +1143,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getManufacturerStandardProductIDType()
     {
@@ -1063,7 +1151,7 @@ class Product
     }
 
     /**
-     * @param String $ManufacturerStandardProductIDType
+     * @param string $ManufacturerStandardProductIDType
      * @return Product
      */
     public function setManufacturerStandardProductIDType($ManufacturerStandardProductIDType)
@@ -1073,7 +1161,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getManufacturerStandardProductIDValue()
     {
@@ -1081,7 +1169,7 @@ class Product
     }
 
     /**
-     * @param String $ManufacturerStandardProductIDValue
+     * @param string $ManufacturerStandardProductIDValue
      * @return Product
      */
     public function setManufacturerStandardProductIDValue($ManufacturerStandardProductIDValue)
@@ -1091,7 +1179,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getProductBrand()
     {
@@ -1099,7 +1187,7 @@ class Product
     }
 
     /**
-     * @param String $ProductBrand
+     * @param string $ProductBrand
      * @return Product
      */
     public function setProductBrand($ProductBrand)
@@ -1109,7 +1197,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getCustomsTariffNumber()
     {
@@ -1117,7 +1205,7 @@ class Product
     }
 
     /**
-     * @param String $CustomsTariffNumber
+     * @param string $CustomsTariffNumber
      * @return Product
      */
     public function setCustomsTariffNumber($CustomsTariffNumber)
@@ -1127,7 +1215,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getGoogleProductCategory()
     {
@@ -1135,7 +1223,7 @@ class Product
     }
 
     /**
-     * @param String $GoogleProductCategory
+     * @param string $GoogleProductCategory
      * @return Product
      */
     public function setGoogleProductCategory($GoogleProductCategory)
@@ -1163,7 +1251,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getPattern()
     {
@@ -1171,7 +1259,7 @@ class Product
     }
 
     /**
-     * @param String $Pattern
+     * @param string $Pattern
      * @return Product
      */
     public function setPattern($Pattern)
@@ -1181,7 +1269,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getMaterial()
     {
@@ -1189,7 +1277,7 @@ class Product
     }
 
     /**
-     * @param String $Material
+     * @param string $Material
      * @return Product
      */
     public function setMaterial($Material)
@@ -1199,7 +1287,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getItemColor()
     {
@@ -1207,7 +1295,7 @@ class Product
     }
 
     /**
-     * @param String $ItemColor
+     * @param string $ItemColor
      * @return Product
      */
     public function setItemColor($ItemColor)
@@ -1217,7 +1305,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getItemSize()
     {
@@ -1225,7 +1313,7 @@ class Product
     }
 
     /**
-     * @param String $ItemSize
+     * @param string $ItemSize
      * @return Product
      */
     public function setItemSize($ItemSize)
@@ -1235,7 +1323,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getCanonicalUrl()
     {
@@ -1243,7 +1331,7 @@ class Product
     }
 
     /**
-     * @param String $CanonicalUrl
+     * @param string $CanonicalUrl
      * @return Product
      */
     public function setCanonicalUrl($CanonicalUrl)
@@ -1271,7 +1359,7 @@ class Product
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getEnergyClassPictureUrl()
     {
@@ -1279,7 +1367,7 @@ class Product
     }
 
     /**
-     * @param String $EnergyClassPictureUrl
+     * @param string $EnergyClassPictureUrl
      * @return Product
      */
     public function setEnergyClassPictureUrl($EnergyClassPictureUrl)
@@ -1465,968 +1553,6 @@ class Product
     public function setAdditionalDescriptionFields($AdditionalDescriptionFields)
     {
         $this->AdditionalDescriptionFields = $AdditionalDescriptionFields;
-        return $this;
-    }
-}
-
-class ProductIdent
-{
-    /** @var Boolean */ private $ProductInsert;
-    /** @var Integer */ private $BaseProductType;
-    /** @var String */ private $UserProductID;
-    /** @var Integer */ private $ProductID;
-    /** @var Float */ private $Anr;
-    /** @var String */ private $EAN;
-
-    /**
-     * @return bool
-     */
-    public function isProductInsert()
-    {
-        return $this->ProductInsert;
-    }
-
-    /**
-     * @param bool $ProductInsert
-     * @return ProductIdent
-     */
-    public function setProductInsert($ProductInsert)
-    {
-        $this->ProductInsert = $ProductInsert;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBaseProductType()
-    {
-        return $this->BaseProductType;
-    }
-
-    /**
-     * @param int $BaseProductType
-     * @return ProductIdent
-     */
-    public function setBaseProductType($BaseProductType)
-    {
-        $this->BaseProductType = $BaseProductType;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getUserProductID()
-    {
-        return $this->UserProductID;
-    }
-
-    /**
-     * @param String $UserProductID
-     * @return ProductIdent
-     */
-    public function setUserProductID($UserProductID)
-    {
-        $this->UserProductID = $UserProductID;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getProductID()
-    {
-        return $this->ProductID;
-    }
-
-    /**
-     * @param int $ProductID
-     * @return ProductIdent
-     */
-    public function setProductID($ProductID)
-    {
-        $this->ProductID = $ProductID;
-        return $this;
-    }
-
-    /**
-     * @return Float
-     */
-    public function getAnr()
-    {
-        return $this->Anr;
-    }
-
-    /**
-     * @param Float $Anr
-     * @return ProductIdent
-     */
-    public function setAnr($Anr)
-    {
-        $this->Anr = $Anr;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getEAN()
-    {
-        return $this->EAN;
-    }
-
-    /**
-     * @param String $EAN
-     * @return ProductIdent
-     */
-    public function setEAN($EAN)
-    {
-        $this->EAN = $EAN;
-        return $this;
-    }
-}
-
-class Skus
-{
-    /** @var Integer */ private $UpdateAction;
-    /** @var string[] */ private $Sku;
-
-    /**
-     * @return int
-     */
-    public function getUpdateAction()
-    {
-        return $this->UpdateAction;
-    }
-
-    /**
-     * @param int $UpdateAction
-     * @return Skus
-     */
-    public function setUpdateAction($UpdateAction)
-    {
-        $this->UpdateAction = $UpdateAction;
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSku()
-    {
-        return $this->Sku;
-    }
-
-    /**
-     * @param string[] $Sku
-     * @return Skus
-     */
-    public function setSku($Sku)
-    {
-        $this->Sku = $Sku;
-        return $this;
-    }
-}
-
-class AddCatalogs
-{
-    /** @var Integer */ private $UpdateAction;
-    /** @var AddCatalog[] */ private $AddCatalog;
-
-    /**
-     * @return int
-     */
-    public function getUpdateAction()
-    {
-        return $this->UpdateAction;
-    }
-
-    /**
-     * @param int $UpdateAction
-     * @return AddCatalogs
-     */
-    public function setUpdateAction($UpdateAction)
-    {
-        $this->UpdateAction = $UpdateAction;
-        return $this;
-    }
-
-    /**
-     * @return AddCatalog[]
-     */
-    public function getAddCatalog()
-    {
-        return $this->AddCatalog;
-    }
-
-    /**
-     * @param AddCatalog[] $AddCatalog
-     * @return AddCatalogs
-     */
-    public function setAddCatalog($AddCatalog)
-    {
-        $this->AddCatalog = $AddCatalog;
-        return $this;
-    }
-}
-
-class AddCatalog
-{
-    /** @var Integer */ private $CatalogID;
-    /** @var String */ private $CatalogName;
-    /** @var Integer */ private $CatalogLevel;
-
-    /**
-     * @return int
-     */
-    public function getCatalogID()
-    {
-        return $this->CatalogID;
-    }
-
-    /**
-     * @param int $CatalogID
-     * @return AddCatalog
-     */
-    public function setCatalogID($CatalogID)
-    {
-        $this->CatalogID = $CatalogID;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getCatalogName()
-    {
-        return $this->CatalogName;
-    }
-
-    /**
-     * @param String $CatalogName
-     * @return AddCatalog
-     */
-    public function setCatalogName($CatalogName)
-    {
-        $this->CatalogName = $CatalogName;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCatalogLevel()
-    {
-        return $this->CatalogLevel;
-    }
-
-    /**
-     * @param int $CatalogLevel
-     * @return AddCatalog
-     */
-    public function setCatalogLevel($CatalogLevel)
-    {
-        $this->CatalogLevel = $CatalogLevel;
-        return $this;
-    }
-}
-
-class AddAttributes
-{
-    /** @var Integer */ private $UpdateAction;
-    /** @var AddAttribut[] */ private $AddAttribut;
-
-    /**
-     * @return int
-     */
-    public function getUpdateAction()
-    {
-        return $this->UpdateAction;
-    }
-
-    /**
-     * @param int $UpdateAction
-     * @return AddAttributes
-     */
-    public function setUpdateAction($UpdateAction)
-    {
-        $this->UpdateAction = $UpdateAction;
-        return $this;
-    }
-
-    /**
-     * @return AddAttribut[]
-     */
-    public function getAddAttribut()
-    {
-        return $this->AddAttribut;
-    }
-
-    /**
-     * @param AddAttribut[] $AddAttribut
-     * @return AddAttributes
-     */
-    public function setAddAttribut($AddAttribut)
-    {
-        $this->AddAttribut = $AddAttribut;
-        return $this;
-    }
-}
-
-class AddAttribut
-{
-    /** @var String */ private $AttributName;
-    /** @var String */ private $AttributValue;
-    /** @var Integer */ private $AttributTyp;
-    /** @var Integer */ private $AttributPosition;
-    /** @var Boolean */ private $AttributRequired;
-
-    /**
-     * @return String
-     */
-    public function getAttributName()
-    {
-        return $this->AttributName;
-    }
-
-    /**
-     * @param String $AttributName
-     * @return AddAttribut
-     */
-    public function setAttributName($AttributName)
-    {
-        $this->AttributName = $AttributName;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getAttributValue()
-    {
-        return $this->AttributValue;
-    }
-
-    /**
-     * @param String $AttributValue
-     * @return AddAttribut
-     */
-    public function setAttributValue($AttributValue)
-    {
-        $this->AttributValue = $AttributValue;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAttributTyp()
-    {
-        return $this->AttributTyp;
-    }
-
-    /**
-     * @param int $AttributTyp
-     * @return AddAttribut
-     */
-    public function setAttributTyp($AttributTyp)
-    {
-        $this->AttributTyp = $AttributTyp;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAttributPosition()
-    {
-        return $this->AttributPosition;
-    }
-
-    /**
-     * @param int $AttributPosition
-     * @return AddAttribut
-     */
-    public function setAttributPosition($AttributPosition)
-    {
-        $this->AttributPosition = $AttributPosition;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAttributRequired()
-    {
-        return $this->AttributRequired;
-    }
-
-    /**
-     * @param bool $AttributRequired
-     * @return AddAttribut
-     */
-    public function setAttributRequired($AttributRequired)
-    {
-        $this->AttributRequired = $AttributRequired;
-        return $this;
-    }
-}
-
-class AddBaseProducts
-{
-    /** @var Integer */ private $UpdateAction;
-    /** @var AddBaseProduct[] */ private $AddBaseProduct;
-
-    /**
-     * @return int
-     */
-    public function getUpdateAction()
-    {
-        return $this->UpdateAction;
-    }
-
-    /**
-     * @param int $UpdateAction
-     * @return AddBaseProducts
-     */
-    public function setUpdateAction($UpdateAction)
-    {
-        $this->UpdateAction = $UpdateAction;
-        return $this;
-    }
-
-    /**
-     * @return AddBaseProduct[]
-     */
-    public function getAddBaseProduct()
-    {
-        return $this->AddBaseProduct;
-    }
-
-    /**
-     * @param AddBaseProduct[] $AddBaseProduct
-     * @return AddBaseProducts
-     */
-    public function setAddBaseProduct($AddBaseProduct)
-    {
-        $this->AddBaseProduct = $AddBaseProduct;
-        return $this;
-    }
-}
-
-class AddBaseProduct
-{
-    /** @var Integer */ private $ProductID;
-    /** @var String */ private $ProductLabel;
-    /** @var Integer */ private $ProductPos;
-    /** @var Integer */ private $DefaultProduct;
-    /** @var Integer */ private $ProductQuantity;
-
-    /**
-     * @return int
-     */
-    public function getProductID()
-    {
-        return $this->ProductID;
-    }
-
-    /**
-     * @param int $ProductID
-     * @return AddBaseProduct
-     */
-    public function setProductID($ProductID)
-    {
-        $this->ProductID = $ProductID;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getProductLabel()
-    {
-        return $this->ProductLabel;
-    }
-
-    /**
-     * @param String $ProductLabel
-     * @return AddBaseProduct
-     */
-    public function setProductLabel($ProductLabel)
-    {
-        $this->ProductLabel = $ProductLabel;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getProductPos()
-    {
-        return $this->ProductPos;
-    }
-
-    /**
-     * @param int $ProductPos
-     * @return AddBaseProduct
-     */
-    public function setProductPos($ProductPos)
-    {
-        $this->ProductPos = $ProductPos;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultProduct()
-    {
-        return $this->DefaultProduct;
-    }
-
-    /**
-     * @param int $DefaultProduct
-     * @return AddBaseProduct
-     */
-    public function setDefaultProduct($DefaultProduct)
-    {
-        $this->DefaultProduct = $DefaultProduct;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getProductQuantity()
-    {
-        return $this->ProductQuantity;
-    }
-
-    /**
-     * @param int $ProductQuantity
-     * @return AddBaseProduct
-     */
-    public function setProductQuantity($ProductQuantity)
-    {
-        $this->ProductQuantity = $ProductQuantity;
-        return $this;
-    }
-}
-
-class PartsFitment
-{
-    /** @var PartsProperties */ private $PartsProperties;
-
-    /**
-     * @return PartsProperties
-     */
-    public function getPartsProperties()
-    {
-        return $this->PartsProperties;
-    }
-
-    /**
-     * @param PartsProperties $PartsProperties
-     * @return PartsFitment
-     */
-    public function setPartsProperties($PartsProperties)
-    {
-        $this->PartsProperties = $PartsProperties;
-        return $this;
-    }
-}
-
-class PartsProperties
-{
-    /** @var PartsProperty[] */ private $PartsProperty;
-
-    /**
-     * @return PartsProperty[]
-     */
-    public function getPartsProperty()
-    {
-        return $this->PartsProperty;
-    }
-
-    /**
-     * @param PartsProperty[] $PartsProperty
-     * @return PartsProperties
-     */
-    public function setPartsProperty($PartsProperty)
-    {
-        $this->PartsProperty = $PartsProperty;
-        return $this;
-    }
-}
-
-class PartsProperty
-{
-    /** @var String */ private $PropertyName;
-    /** @var String */ private $PropertyValue;
-
-    /**
-     * @return String
-     */
-    public function getPropertyName()
-    {
-        return $this->PropertyName;
-    }
-
-    /**
-     * @param String $PropertyName
-     * @return PartsProperty
-     */
-    public function setPropertyName($PropertyName)
-    {
-        $this->PropertyName = $PropertyName;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getPropertyValue()
-    {
-        return $this->PropertyValue;
-    }
-
-    /**
-     * @param String $PropertyValue
-     * @return PartsProperty
-     */
-    public function setPropertyValue($PropertyValue)
-    {
-        $this->PropertyValue = $PropertyValue;
-        return $this;
-    }
-}
-
-class ProductPictures
-{
-    /** @var ProductPicture[] */ private $ProductPicture;
-
-    /**
-     * @return ProductPicture[]
-     */
-    public function getProductPicture()
-    {
-        return $this->ProductPicture;
-    }
-
-    /**
-     * @param ProductPicture[] $ProductPicture
-     * @return ProductPictures
-     */
-    public function setProductPicture($ProductPicture)
-    {
-        $this->ProductPicture = $ProductPicture;
-        return $this;
-    }
-}
-
-class ProductPicture
-{
-    /** @var Integer */ private $Nr;
-    /** @var String */ private $Url;
-    /** @var String */ private $AltText;
-    /** @var object */ private $Childs;
-
-    /**
-     * @return int
-     */
-    public function getNr()
-    {
-        return $this->Nr;
-    }
-
-    /**
-     * @param int $Nr
-     * @return ProductPicture
-     */
-    public function setNr($Nr)
-    {
-        $this->Nr = $Nr;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getUrl()
-    {
-        return $this->Url;
-    }
-
-    /**
-     * @param String $Url
-     * @return ProductPicture
-     */
-    public function setUrl($Url)
-    {
-        $this->Url = $Url;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getAltText()
-    {
-        return $this->AltText;
-    }
-
-    /**
-     * @param String $AltText
-     * @return ProductPicture
-     */
-    public function setAltText($AltText)
-    {
-        $this->AltText = $AltText;
-        return $this;
-    }
-
-    /**
-     * @return object
-     */
-    public function getChilds()
-    {
-        return $this->Childs;
-    }
-
-    /**
-     * @param object $Childs
-     * @return ProductPicture
-     */
-    public function setChilds($Childs)
-    {
-        $this->Childs = $Childs;
-        return $this;
-    }
-}
-
-class ScaledDiscounts
-{
-    /** @var ScaledDiscount[] */ private $ScaledDiscount;
-
-    /**
-     * @return ScaledDiscount[]
-     */
-    public function getScaledDiscount()
-    {
-        return $this->ScaledDiscount;
-    }
-
-    /**
-     * @param ScaledDiscount[] $ScaledDiscount
-     * @return ScaledDiscounts
-     */
-    public function setScaledDiscount($ScaledDiscount)
-    {
-        $this->ScaledDiscount = $ScaledDiscount;
-        return $this;
-    }
-}
-
-class ScaledDiscount
-{
-    /** @var Integer */ private $ScaledQuantity;
-    /** @var Float */ private $ScaledPrice;
-    /** @var Float */ private $ScaledDPrice;
-
-    /**
-     * @return int
-     */
-    public function getScaledQuantity()
-    {
-        return $this->ScaledQuantity;
-    }
-
-    /**
-     * @param int $ScaledQuantity
-     * @return ScaledDiscount
-     */
-    public function setScaledQuantity($ScaledQuantity)
-    {
-        $this->ScaledQuantity = $ScaledQuantity;
-        return $this;
-    }
-
-    /**
-     * @return Float
-     */
-    public function getScaledPrice()
-    {
-        return $this->ScaledPrice;
-    }
-
-    /**
-     * @param Float $ScaledPrice
-     * @return ScaledDiscount
-     */
-    public function setScaledPrice($ScaledPrice)
-    {
-        $this->ScaledPrice = $ScaledPrice;
-        return $this;
-    }
-
-    /**
-     * @return Float
-     */
-    public function getScaledDPrice()
-    {
-        return $this->ScaledDPrice;
-    }
-
-    /**
-     * @param Float $ScaledDPrice
-     * @return ScaledDiscount
-     */
-    public function setScaledDPrice($ScaledDPrice)
-    {
-        $this->ScaledDPrice = $ScaledDPrice;
-        return $this;
-    }
-}
-
-class AdditionalDescriptionFields
-{
-    /** @var AdditionalDescriptionField[] */ private $AdditionalDescriptionField;
-
-    /**
-     * @return AdditionalDescriptionField[]
-     */
-    public function getAdditionalDescriptionField()
-    {
-        return $this->AdditionalDescriptionField;
-    }
-
-    /**
-     * @param AdditionalDescriptionField[] $AdditionalDescriptionField
-     * @return AdditionalDescriptionFields
-     */
-    public function setAdditionalDescriptionField($AdditionalDescriptionField)
-    {
-        $this->AdditionalDescriptionField = $AdditionalDescriptionField;
-        return $this;
-    }
-}
-
-class AdditionalDescriptionField
-{
-    /** @var String */ private $FieldIDIdent;
-    /** @var String */ private $FieldNameIdent;
-
-    /** @var Integer */ private $FieldID;
-    /** @var String */ private $FieldName;
-    /** @var String */ private $FieldLabel;
-    /** @var String */ private $FieldContent;
-
-    /**
-     * @return String
-     */
-    public function getFieldIDIdent()
-    {
-        return $this->FieldIDIdent;
-    }
-
-    /**
-     * @param String $FieldIDIdent
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldIDIdent($FieldIDIdent)
-    {
-        $this->FieldIDIdent = $FieldIDIdent;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getFieldNameIdent()
-    {
-        return $this->FieldNameIdent;
-    }
-
-    /**
-     * @param String $FieldNameIdent
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldNameIdent($FieldNameIdent)
-    {
-        $this->FieldNameIdent = $FieldNameIdent;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFieldID()
-    {
-        return $this->FieldID;
-    }
-
-    /**
-     * @param int $FieldID
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldID($FieldID)
-    {
-        $this->FieldID = $FieldID;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getFieldName()
-    {
-        return $this->FieldName;
-    }
-
-    /**
-     * @param String $FieldName
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldName($FieldName)
-    {
-        $this->FieldName = $FieldName;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getFieldLabel()
-    {
-        return $this->FieldLabel;
-    }
-
-    /**
-     * @param String $FieldLabel
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldLabel($FieldLabel)
-    {
-        $this->FieldLabel = $FieldLabel;
-        return $this;
-    }
-
-    /**
-     * @return String
-     */
-    public function getFieldContent()
-    {
-        return $this->FieldContent;
-    }
-
-    /**
-     * @param String $FieldContent
-     * @return AdditionalDescriptionField
-     */
-    public function setFieldContent($FieldContent)
-    {
-        $this->FieldContent = $FieldContent;
         return $this;
     }
 }
