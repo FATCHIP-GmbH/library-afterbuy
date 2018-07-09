@@ -71,12 +71,19 @@ class ApiClient
     /**
      * Returns the Afterbuy products as XML
      *
-     * @param int $iMaxPageSize
+     * @param int $iMaxShopItems
      * @param int $iPage
      * @return string
      */
-    public function getShopProductsFromAfterbuy($iMaxPageSize = 250, $iPage = 0) {
-        $request = $this->buildRequest('GetVersion', []);
+    public function getShopProductsFromAfterbuy($iMaxShopItems = 250, $iPage = 0) {
+        $params = [
+            'MaxShopItems' => $iMaxShopItems,
+            'SuppressBaseProductRelatedData' => 0,
+            'PaginationEnabled' => 1,
+            'PageNumber' => $iPage,
+            'ReturnShop20Container' => 0
+        ];
+        $request = $this->buildRequest('GetShopProducts', $params);
         echo var_dump($request);
         $response = $this->sendRequest($request);
         return $response;
