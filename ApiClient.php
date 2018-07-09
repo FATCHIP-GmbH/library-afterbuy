@@ -79,14 +79,6 @@ class ApiClient
         $request = $this->buildRequest('GetVersion', []);
         echo var_dump($request);
         $response = $this->sendRequest($request);
-//        $sXmlData = $this->getXmlHead('GetShopProducts');
-//        $sXmlData .= '<MaxShopItems>' . $iMaxPageSize . '</MaxShopItems>';
-//        $sXmlData .= '<SuppressBaseProductRelatedData>0</SuppressBaseProductRelatedData>';
-//        $sXmlData .= '<PaginationEnabled>1</PaginationEnabled>';
-//        $sXmlData .= '<PageNumber>' . $iPage . '</PageNumber>';
-//        $sXmlData .= '<ReturnShop20Container>0</ReturnShop20Container>';
-//        $sXmlData .= $this->getXmlFoot();
-//        $sOutput = $this->requestAPI($sXmlData);
         return $response;
     }
 
@@ -109,7 +101,6 @@ class ApiClient
             'DetailLevel' => $detailLevel,
         ];
         $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
-//        die(var_dump($request));
         return $this->serializer->normalize($request);
     }
 
@@ -120,7 +111,6 @@ class ApiClient
     protected function sendRequest($request)
     {
         $request = $this->serializer->encode($request, 'request/xml');
-        var_dump($request);
         $ch = curl_init($this->afterbuyAbiUrl);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
