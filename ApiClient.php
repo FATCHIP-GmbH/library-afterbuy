@@ -84,7 +84,6 @@ class ApiClient
             'ReturnShop20Container' => 0
         ];
         $request = $this->buildRequest('GetShopProducts', $params);
-        echo var_dump($request);
         $response = $this->sendRequest($request);
         return $response;
     }
