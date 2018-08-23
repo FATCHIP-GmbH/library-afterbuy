@@ -69,10 +69,11 @@ class ApiClient
     }
 
     /**
-     * Returns the Afterbuy products as XML
+     * Returns the Afterbuy products as array
      *
      * @param int $iMaxShopItems
      * @param int $iPage
+     *
      * @return array
      */
     public function getShopProductsFromAfterbuy($iMaxShopItems = 250, $iPage = 0) {
