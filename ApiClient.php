@@ -68,9 +68,14 @@ class ApiClient
         return $response;
     }
 
-    public function getCatalogsFromAfterbuy($maxCatalogs, $detailLevel) {
+    public function getCatalogsFromAfterbuy(
+        $maxCatalogs,
+        $detailLevel,
+        $pageNumber
+    ) {
         $params = [
-            'MaxCatalogs' => $maxCatalogs
+            'MaxCatalogs' => $maxCatalogs,
+            'PageNumber' => $pageNumber
         ];
 
         $request = $this->buildRequest('GetShopCatalogs', $params, 'EN', $detailLevel);
