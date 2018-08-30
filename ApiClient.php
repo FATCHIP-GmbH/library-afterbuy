@@ -68,6 +68,16 @@ class ApiClient
         return $response;
     }
 
+    public function getCatalogsFromAfterbuy($maxCatalogs, $detailLevel) {
+        $params = [
+            'MaxCatalogs' => $maxCatalogs
+        ];
+
+        $request = $this->buildRequest('GetShopCatalogs', $params, 'EN', $detailLevel);
+        $response = $this->sendRequest($request);
+        return $response;
+    }
+
     /**
      * Returns the Afterbuy products as array
      *
