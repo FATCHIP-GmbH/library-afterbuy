@@ -86,21 +86,30 @@ class ApiClient
     /**
      * Returns the Afterbuy products as array
      *
-     * @param int $iMaxShopItems
-     * @param int $iPage
+     * @param int   $iMaxShopItems
+     * @param int   $iPage
+     * @param array $dataFilter DataFilter, as described in
+     *                          https://xmldoku.afterbuy.de/dokued/
+     *                          GetShopProducts
      *
      * @return array
      */
-    public function getShopProductsFromAfterbuy($iMaxShopItems = 250, $iPage = 0) {
+    public function getShopProductsFromAfterbuy(
+        $iMaxShopItems = 250,
+        $iPage = 0,
+        $dataFilter = []
+    ) {
         $params = [
-            'MaxShopItems' => $iMaxShopItems,
+            'MaxShopItems'                   => $iMaxShopItems,
             'SuppressBaseProductRelatedData' => 0,
-            'PaginationEnabled' => 1,
-            'PageNumber' => $iPage,
-            'ReturnShop20Container' => 0
+            'PaginationEnabled'              => 1,
+            'PageNumber'                     => $iPage,
+            'ReturnShop20Container'          => 0,
+            'DataFilter'                     => $dataFilter
         ];
         $request = $this->buildRequest('GetShopProducts', $params);
         $response = $this->sendRequest($request);
+
         return $response;
     }
 
