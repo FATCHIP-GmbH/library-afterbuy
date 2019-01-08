@@ -83,6 +83,16 @@ class ApiClient
         return $response;
     }
 
+    public function getOrdersFromAfterbuy($detailLevel = 0) {
+        //TODO: add filter
+
+        $params = array();
+
+        $request = $this->buildRequest('GetSoldItems', $params, 'EN', $detailLevel);
+        $response = $this->sendRequest($request);
+        return $response;
+    }
+
     /**
      * Returns the Afterbuy products as array
      *
