@@ -83,6 +83,21 @@ class ApiClient
         return $response;
     }
 
+    public function updateCatalogs($catalogs) {
+        //TODO: add filter
+
+        $params = [
+            'Catalogs' => [
+                'Catalog' => $catalogs,
+                'UpdateAction' => 1,
+            ]
+        ];
+
+        $request = $this->buildRequest('UpdateCatalogs', $params);
+
+        return $this->sendRequest($request);
+    }
+
     public function getOrdersFromAfterbuy($detailLevel = 0) {
         //TODO: add filter
 
