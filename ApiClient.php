@@ -110,8 +110,6 @@ class ApiClient
         ];
         //TODO: add filter
 
- 
-
         $request = $this->buildRequest('GetSoldItems', $params, 'EN', $detailLevel);
         $response = $this->sendRequest($request);
         return $response;
