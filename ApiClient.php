@@ -83,7 +83,22 @@ class ApiClient
         return $response;
     }
 
-    public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
+    public function updateCatalogs($catalogs) {
+        //TODO: add filter
+
+        $params = [
+            'Catalogs' => [
+                'Catalog' => $catalogs,
+                'UpdateAction' => 1,
+            ]
+        ];
+
+        $request = $this->buildRequest('UpdateCatalogs', $params);
+
+        return $this->sendRequest($request);
+    }
+
+        public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
         //TODO: add date filter
         $params = [
             'MaxSoldItems'                   => $iMaxShopItems,
@@ -93,6 +108,9 @@ class ApiClient
             'ReturnShop20Container'          => 0,
             'DataFilter'                     => $dataFilter
         ];
+        //TODO: add filter
+
+ 
 
         $request = $this->buildRequest('GetSoldItems', $params, 'EN', $detailLevel);
         $response = $this->sendRequest($request);
