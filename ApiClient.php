@@ -83,14 +83,46 @@ class ApiClient
         return $response;
     }
 
-    public function getOrdersFromAfterbuy($detailLevel = 0) {
-        //TODO: add filter
-
-        $params = array();
+    public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
+        //TODO: add date filter
+        $params = [
+            'MaxSoldItems'                   => $iMaxShopItems,
+            'SuppressBaseProductRelatedData' => 0,
+            'PaginationEnabled'              => 1,
+            'PageNumber'                     => $iPage,
+            'ReturnShop20Container'          => 0,
+            'DataFilter'                     => $dataFilter
+        ];
 
         $request = $this->buildRequest('GetSoldItems', $params, 'EN', $detailLevel);
         $response = $this->sendRequest($request);
         return $response;
+    }
+
+    public function getAllShopProductsFromAfterbuy(
+        $dataFilter = []
+
+    ) {
+        $i = 1;
+
+        $articles = [];
+
+        do {
+            $response = $this->getShopProductsFromAfterbuy($dataFilter, 250, $i++);
+
+            if(array_key_exists('ProductID', $response['Result']['Products']['Product'])) {
+                array_push($articles, $response['Result']['Products']['Product']);
+            }
+            else {
+                foreach ($response['Result']['Products']['Product'] as $product) {
+                    array_push($articles, $product);
+                }
+            }
+
+
+        } while($response["Result"]["HasMoreProducts"] == "1");
+
+        return $articles;
     }
 
     /**
@@ -105,9 +137,9 @@ class ApiClient
      * @return array
      */
     public function getShopProductsFromAfterbuy(
+        $dataFilter = [],
         $iMaxShopItems = 250,
-        $iPage = 0,
-        $dataFilter = []
+        $iPage = 0
     ) {
         $params = [
             'MaxShopItems'                   => $iMaxShopItems,
