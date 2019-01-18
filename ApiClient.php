@@ -78,7 +78,7 @@ class ApiClient
             'PageNumber' => $pageNumber
         ];
 
-        $request = $this->buildRequest('GetShopCatalogs', $params, 'EN', $detailLevel);
+        $request = $this->buildRequest('GetShopCatalogs', $params, false,'EN', $detailLevel);
         $response = $this->sendRequest($request);
         return $response;
     }
@@ -108,9 +108,8 @@ class ApiClient
             'ReturnShop20Container'          => 0,
             'DataFilter'                     => $dataFilter
         ];
-        //TODO: add filter
 
-        $request = $this->buildRequest('GetSoldItems', $params, 'EN', $detailLevel);
+        $request = $this->buildRequest('GetSoldItems', $params, false,'EN', $detailLevel);
         $response = $this->sendRequest($request);
         return $response;
     }
@@ -178,29 +177,68 @@ class ApiClient
      * @param int $detailLevel
      * @return array
      */
-    protected function buildRequest($callName, $content, $errorLanguage = 'EN', $detailLevel = 0)
+    protected function buildRequest($callName, $content, $shopInterface = false, $errorLanguage = 'EN', $detailLevel = 0)
     {
         $params = [
             'PartnerID' => $this->afterbuyPartnerId,
-            'PartnerPassword' => $this->afterbuyPartnerPassword,
             'UserID' => $this->afterbuyUsername,
-            'UserPassword' => $this->afterbuyUserPassword,
-            'ErrorLanguage' => $errorLanguage,
-            'CallName' => $callName,
-            'DetailLevel' => $detailLevel,
+            'UserPassword' => $this->afterbuyUserPassword
         ];
-        $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
-        return $this->serializer->normalize($request);
+
+        if($shopInterface) {
+            $params['Action'] = $callName;
+            $params['PartnerPass'] = $this->afterbuyPartnerPassword;
+
+            $request = array_merge($params, $content);
+            return http_build_query($request);
+
+        } else {
+            $params['ErrorLanguage'] = $errorLanguage;
+            $params['CallName'] = $callName;
+            $params['DetailLevel'] = $detailLevel;
+            $params['PartnerPassword'] = $this->afterbuyPartnerPassword;
+
+            $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
+            return $this->serializer->normalize($request);
+        }
     }
 
     /**
      * @param mixed $request
      * @return mixed
      */
-    protected function sendRequest($request)
+    public function sendOrdersToAfterbuy($values)
     {
-        $request = $this->serializer->encode($request, 'request/xml');
-        $ch = curl_init($this->afterbuyAbiUrl);
+        $result = array();
+
+        $request = $this->buildRequest('new', $values, true);
+        $response = $this->sendRequest($request, true);
+
+        if($response["success"] == "1") {
+            $result = array (
+                'ordernumber' => $response["data"]["VID"],
+                'afterbuyId' => $response["data"]["AID"]
+            );
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * @param mixed $request
+     * @return mixed
+     */
+    protected function sendRequest($request, $shopInterface = false)
+    {
+        if(!$shopInterface) {
+            $request = $this->serializer->encode($request, 'request/xml');
+            $resource = $this->afterbuyAbiUrl;
+        } else {
+            $resource = $this->afterbuyShopInterfaceBaseUrl . '?' . $request;
+        }
+
+        $ch = curl_init($resource);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
