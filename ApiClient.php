@@ -71,11 +71,13 @@ class ApiClient
     public function getCatalogsFromAfterbuy(
         $maxCatalogs,
         $detailLevel,
-        $pageNumber
+        $pageNumber,
+        $dataFilter = []
     ) {
         $params = [
             'MaxCatalogs' => $maxCatalogs,
-            'PageNumber' => $pageNumber
+            'PageNumber'  => $pageNumber,
+            'DataFilter'      => $dataFilter,
         ];
 
         $request = $this->buildRequest('GetShopCatalogs', $params, false,'EN', $detailLevel);
