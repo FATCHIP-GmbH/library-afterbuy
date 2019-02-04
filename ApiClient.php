@@ -37,25 +37,12 @@ class ApiClient
         $this->serializer = new Serializer($normalizers, $encoders);
     }
 
-    /**
-     * @param Product[]|Product $products
-     * @return mixed
-     * @throws \Exception
-     */
+
     public function updateShopProducts($products)
     {
-        if (!is_array($products)) {
-            $products = [$products];
-        }
-        foreach ($products as $index => $value) {
-            if ($value instanceof Product === false) {
-                throw new \InvalidArgumentException("Item '{$index}' is " .
-                    "not an instance of \Fatchip\Afterbuy\Types\Product");
-            }
-        }
-        $request = $this->buildRequest('UpdateShopProducts', ['Products' => ['Product' => $products]]);
+        $request = $this->buildRequest('UpdateShopProducts', $products);
         $response = $this->sendRequest($request);
-        if ($response['CallStatus'] !== 'Success') {
+        if ($response['CallStatus'] === 'Error') {
             if ($response['Result']['ErrorList']['Error']['ErrorCode']) {
                 throw new \Exception(
                     $response['Result']['ErrorList']['Error']['ErrorDescription'],
@@ -85,19 +72,27 @@ class ApiClient
         return $response;
     }
 
+    public function updateOrderStatus(array $content) {
+
+        $request = $this->buildRequest('UpdateSoldItems', $content, false,'EN');
+        $response = $this->sendRequest($request);
+        return $response;
+    }
+
     public function updateCatalogs($catalogs) {
         //TODO: add filter
 
         $params = [
             'Catalogs' => [
                 'Catalog' => $catalogs,
-                'UpdateAction' => 1,
+                'UpdateAction' => 2,
             ]
         ];
 
         $request = $this->buildRequest('UpdateCatalogs', $params);
 
-        return $this->sendRequest($request);
+        $response = $this->sendRequest($request);
+        return $response;
     }
 
         public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
