@@ -218,6 +218,11 @@ class ApiClient
                 'afterbuyId' => $response["data"]["AID"]
             );
         }
+        else {
+            if(array_key_exists('errorlist', $response)) {
+                $result = array('error' => $response['errorlist']);
+            }
+        }
 
         return $result;
 
