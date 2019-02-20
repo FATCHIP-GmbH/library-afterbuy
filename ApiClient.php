@@ -43,7 +43,7 @@ class ApiClient
         $request = $this->buildRequest('UpdateShopProducts', $products);
         $response = $this->sendRequest($request);
         if ($response['CallStatus'] === 'Error') {
-            if ($response['Result']['ErrorList']['Error']['ErrorCode']) {
+            if (array_key_exists('ErrorCode', $response['Result']['ErrorList']['Error'])) {
                 throw new \Exception(
                     $response['Result']['ErrorList']['Error']['ErrorDescription'],
                     $response['Result']['ErrorList']['Error']['ErrorCode']
@@ -80,8 +80,6 @@ class ApiClient
     }
 
     public function updateCatalogs($catalogs) {
-        //TODO: add filter
-
         $params = [
             'Catalogs' => [
                 'Catalog' => $catalogs,
@@ -96,7 +94,6 @@ class ApiClient
     }
 
         public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
-        //TODO: add date filter
         $params = [
             'MaxSoldItems'                   => $iMaxShopItems,
             'SuppressBaseProductRelatedData' => 0,
@@ -121,6 +118,10 @@ class ApiClient
 
         do {
             $response = $this->getShopProductsFromAfterbuy($dataFilter, 250, $i++);
+
+            if(!array_key_exists('Products', $response['Result'])) {
+                break;
+            }
 
             if(array_key_exists('ProductID', $response['Result']['Products']['Product'])) {
                 array_push($articles, $response['Result']['Products']['Product']);
@@ -216,6 +217,11 @@ class ApiClient
                 'ordernumber' => $response["data"]["VID"],
                 'afterbuyId' => $response["data"]["AID"]
             );
+        }
+        else {
+            if(array_key_exists('errorlist', $response)) {
+                $result = array('error' => $response['errorlist']);
+            }
         }
 
         return $result;
