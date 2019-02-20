@@ -93,7 +93,7 @@ class ApiClient
         return $response;
     }
 
-        public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 200, $iPage = 0) {
+        public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 250, $iPage = 0) {
         $params = [
             'MaxSoldItems'                   => $iMaxShopItems,
             'SuppressBaseProductRelatedData' => 0,
