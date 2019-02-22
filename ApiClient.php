@@ -3,6 +3,7 @@
 namespace Fatchip\Afterbuy;
 
 use Fatchip\Afterbuy\Types\Product;
+use Shopware\Components\Logger;
 use Symfony\Component\Serializer\Serializer;
 
 class ApiClient
@@ -24,7 +25,7 @@ class ApiClient
      * ```
      * @param array $config
      */
-    public function __construct($config)
+    public function __construct($config, $logger = null)
     {
         if (!class_exists('\\Symfony\\Component\\Serializer\\Serializer')) {
             require __DIR__ . '/vendor/autoload.php';
@@ -35,6 +36,7 @@ class ApiClient
         $encoders = [new Encoder()];
         $normalizers = [new Normalizer()];
         $this->serializer = new Serializer($normalizers, $encoders);
+        $this->logger = $logger;
     }
 
 
@@ -250,6 +252,11 @@ class ApiClient
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
         curl_close($ch);
+
+        if($this->logger instanceof \Monolog\Logger) {
+            $this->logger->debug('Request', array($request, $response));
+        }
+
         return $this->serializer->decode($response, 'response/xml');
     }
 
@@ -308,4 +315,6 @@ class ApiClient
      * @var Serializer
      */
     protected $serializer = null;
+
+    protected $logger;
 }
