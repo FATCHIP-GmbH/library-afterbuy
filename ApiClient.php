@@ -38,6 +38,14 @@ class ApiClient
         $this->logger = $logger;
     }
 
+    public function getAfterbuyTime()
+    {
+        $request = $this->buildRequest('getAfterbuyTime', array());
+        $response = $this->sendRequest($request);
+
+        return $response;
+    }
+
 
     public function updateShopProducts($products)
     {
