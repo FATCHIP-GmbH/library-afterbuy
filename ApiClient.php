@@ -2,8 +2,6 @@
 
 namespace Fatchip\Afterbuy;
 
-use Fatchip\Afterbuy\Types\Product;
-use Shopware\Components\Logger;
 use Symfony\Component\Serializer\Serializer;
 
 class ApiClient
@@ -24,10 +22,11 @@ class ApiClient
      * );
      * ```
      * @param array $config
+     * @param null $logger
      */
     public function __construct($config, $logger = null)
     {
-        if (!class_exists('\\Symfony\\Component\\Serializer\\Serializer')) {
+        if (!class_exists(Serializer::class)) {
             require __DIR__ . '/vendor/autoload.php';
         }
         foreach ($config as $key => $value) {
@@ -39,6 +38,14 @@ class ApiClient
         $this->logger = $logger;
     }
 
+    public function getAfterbuyTime()
+    {
+        $request = $this->buildRequest('getAfterbuyTime', array());
+        $response = $this->sendRequest($request);
+
+        return $response;
+    }
+
 
     public function updateShopProducts($products)
     {
@@ -46,13 +53,13 @@ class ApiClient
         $response = $this->sendRequest($request);
         if ($response['CallStatus'] === 'Error') {
             if (array_key_exists('ErrorCode', $response['Result']['ErrorList']['Error'])) {
-                throw new \Exception(
+                throw new \RuntimeException(
                     $response['Result']['ErrorList']['Error']['ErrorDescription'],
                     $response['Result']['ErrorList']['Error']['ErrorCode']
                 );
-            } else {
-                throw new \Exception("An unknown error occured during API communication.");
             }
+
+            throw new \RuntimeException('An unknown error occured during API communication.');
         }
         return $response;
     }
@@ -70,15 +77,13 @@ class ApiClient
         ];
 
         $request = $this->buildRequest('GetShopCatalogs', $params, false,'EN', $detailLevel);
-        $response = $this->sendRequest($request);
-        return $response;
+        return $this->sendRequest($request);
     }
 
     public function updateOrderStatus(array $content) {
 
-        $request = $this->buildRequest('UpdateSoldItems', $content, false,'EN');
-        $response = $this->sendRequest($request);
-        return $response;
+        $request = $this->buildRequest('UpdateSoldItems', $content);
+        return $this->sendRequest($request);
     }
 
     public function updateCatalogs($catalogs) {
@@ -91,8 +96,7 @@ class ApiClient
 
         $request = $this->buildRequest('UpdateCatalogs', $params);
 
-        $response = $this->sendRequest($request);
-        return $response;
+        return $this->sendRequest($request);
     }
 
         public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 250, $iPage = 0) {
@@ -106,8 +110,7 @@ class ApiClient
         ];
 
         $request = $this->buildRequest('GetSoldItems', $params, false,'EN', $detailLevel);
-        $response = $this->sendRequest($request);
-        return $response;
+        return $this->sendRequest($request);
     }
 
     public function getAllShopProductsFromAfterbuy(
@@ -126,16 +129,16 @@ class ApiClient
             }
 
             if(array_key_exists('ProductID', $response['Result']['Products']['Product'])) {
-                array_push($articles, $response['Result']['Products']['Product']);
+                $articles[] = $response['Result']['Products']['Product'];
             }
             else {
                 foreach ($response['Result']['Products']['Product'] as $product) {
-                    array_push($articles, $product);
+                    $articles[] = $product;
                 }
             }
 
 
-        } while($response["Result"]["HasMoreProducts"] == "1");
+        } while($response['Result']['HasMoreProducts'] == '1');
 
         return $articles;
     }
@@ -165,14 +168,13 @@ class ApiClient
             'DataFilter'                     => $dataFilter
         ];
         $request = $this->buildRequest('GetShopProducts', $params);
-        $response = $this->sendRequest($request);
-
-        return $response;
+        return $this->sendRequest($request);
     }
 
     /**
      * @param string $callName
      * @param array $content
+     * @param bool $shopInterface
      * @param string $errorLanguage
      * @param int $detailLevel
      * @return array
@@ -192,38 +194,37 @@ class ApiClient
             $request = array_merge($params, $content);
             return http_build_query($request);
 
-        } else {
-            $params['ErrorLanguage'] = $errorLanguage;
-            $params['CallName'] = $callName;
-            $params['DetailLevel'] = $detailLevel;
-            $params['PartnerPassword'] = $this->afterbuyPartnerPassword;
-
-            $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
-            return $this->serializer->normalize($request);
         }
+
+        $params['ErrorLanguage'] = $errorLanguage;
+        $params['CallName'] = $callName;
+        $params['DetailLevel'] = $detailLevel;
+        $params['PartnerPassword'] = $this->afterbuyPartnerPassword;
+
+        $request = array_merge_recursive(['AfterbuyGlobal' => $params], $content);
+        return $this->serializer->normalize($request);
     }
 
     /**
-     * @param mixed $request
+     * @param $values
      * @return mixed
      */
     public function sendOrdersToAfterbuy($values)
     {
         $result = array();
 
+        /** @var array $values */
         $request = $this->buildRequest('new', $values, true);
         $response = $this->sendRequest($request, true);
 
-        if($response["success"] == "1") {
+        if($response['success'] == '1') {
             $result = array (
-                'ordernumber' => $response["data"]["VID"],
-                'afterbuyId' => $response["data"]["AID"]
+                'ordernumber' => $response['data']['VID'],
+                'afterbuyId' => $response['data']['AID']
             );
         }
-        else {
-            if(array_key_exists('errorlist', $response)) {
-                $result = array('error' => $response['errorlist']);
-            }
+        else if(array_key_exists('errorlist', $response)) {
+            $result = array('error' => $response['errorlist']);
         }
 
         return $result;
@@ -232,6 +233,7 @@ class ApiClient
 
     /**
      * @param mixed $request
+     * @param bool $shopInterface
      * @return mixed
      */
     protected function sendRequest($request, $shopInterface = false)
@@ -270,51 +272,51 @@ class ApiClient
      * Filename for logfile
      * @var string
      */
-    protected $afterbuyLogFilepath = null;
+    protected $afterbuyLogFilepath;
 
     /**
      * ABI URL of Afterbuy
      * http://api.afterbuy.de/afterbuy/ABInterface.aspx
      * @var string
      */
-    protected $afterbuyAbiUrl = "";
+    protected $afterbuyAbiUrl = '';
 
     /**
      * Shop Interface Base URL of Afterbuy
      * https://www.afterbuy.de/afterbuy/ShopInterface.aspx
      * @var string
      */
-    protected $afterbuyShopInterfaceBaseUrl = "";
+    protected $afterbuyShopInterfaceBaseUrl = '';
 
     /**
      * Partner ID for Afterbuy
      * @var string
      */
-    protected $afterbuyPartnerId = "";
+    protected $afterbuyPartnerId = '';
 
     /**
      * Partner password for Afterbuy
      * @var string
      */
-    protected $afterbuyPartnerPassword = "";
+    protected $afterbuyPartnerPassword = '';
 
     /**
      * User name for Afterbuy
      * @var string
      */
-    protected $afterbuyUsername = "";
+    protected $afterbuyUsername = '';
 
     /**
      * User password for Afterbuy
      * @var string
      */
-    protected $afterbuyUserPassword = "";
+    protected $afterbuyUserPassword = '';
 
     /**
      * Serializer for API communication
      * @var Serializer
      */
-    protected $serializer = null;
+    protected $serializer;
 
     protected $logger;
 }
