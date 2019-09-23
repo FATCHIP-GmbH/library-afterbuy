@@ -242,7 +242,7 @@ class ApiClient
             $request = $this->serializer->encode($request, 'request/xml');
             $resource = $this->afterbuyAbiUrl;
         } else {
-            $resource = $this->afterbuyShopInterfaceBaseUrl . '?' . $request;
+            $resource = $this->afterbuyShopInterfaceBaseUrl;
         }
 
         $ch = curl_init($resource);
