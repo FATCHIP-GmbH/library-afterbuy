@@ -1,7 +1,9 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace Fatchip\Afterbuy;
 
+use Monolog\Logger;
+use RuntimeException;
 use Symfony\Component\Serializer\Serializer;
 
 class ApiClient
@@ -27,6 +29,7 @@ class ApiClient
     public function __construct($config, $logger = null)
     {
         if (!class_exists(Serializer::class)) {
+            /** @noinspection PhpIncludeInspection */
             require __DIR__ . '/vendor/autoload.php';
         }
         foreach ($config as $key => $value) {
@@ -53,13 +56,13 @@ class ApiClient
         $response = $this->sendRequest($request);
         if ($response['CallStatus'] === 'Error') {
             if (array_key_exists('ErrorCode', $response['Result']['ErrorList']['Error'])) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     $response['Result']['ErrorList']['Error']['ErrorDescription'],
                     $response['Result']['ErrorList']['Error']['ErrorCode']
                 );
             }
 
-            throw new \RuntimeException('An unknown error occured during API communication.');
+            throw new RuntimeException('An unknown error occured during API communication.');
         }
         return $response;
     }
@@ -76,17 +79,18 @@ class ApiClient
             'DataFilter'      => $dataFilter,
         ];
 
-        $request = $this->buildRequest('GetShopCatalogs', $params, false,'EN', $detailLevel);
+        $request = $this->buildRequest('GetShopCatalogs', $params, false, 'EN', $detailLevel);
         return $this->sendRequest($request);
     }
 
-    public function updateOrderStatus(array $content) {
-
+    public function updateOrderStatus(array $content)
+    {
         $request = $this->buildRequest('UpdateSoldItems', $content);
         return $this->sendRequest($request);
     }
 
-    public function updateCatalogs($catalogs) {
+    public function updateCatalogs($catalogs)
+    {
         $params = [
             'Catalogs' => [
                 'Catalog' => $catalogs,
@@ -99,7 +103,8 @@ class ApiClient
         return $this->sendRequest($request);
     }
 
-        public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 250, $iPage = 0) {
+    public function getOrdersFromAfterbuy($dataFilter = [], $detailLevel = 0, $iMaxShopItems = 250, $iPage = 0)
+    {
         $params = [
             'MaxSoldItems'                   => $iMaxShopItems,
             'SuppressBaseProductRelatedData' => 0,
@@ -109,13 +114,12 @@ class ApiClient
             'DataFilter'                     => $dataFilter
         ];
 
-        $request = $this->buildRequest('GetSoldItems', $params, false,'EN', $detailLevel);
+        $request = $this->buildRequest('GetSoldItems', $params, false, 'EN', $detailLevel);
         return $this->sendRequest($request);
     }
 
     public function getAllShopProductsFromAfterbuy(
         $dataFilter = []
-
     ) {
         $i = 1;
 
@@ -124,21 +128,18 @@ class ApiClient
         do {
             $response = $this->getShopProductsFromAfterbuy($dataFilter, 250, $i++);
 
-            if(!array_key_exists('Products', $response['Result'])) {
+            if (!array_key_exists('Products', $response['Result'])) {
                 break;
             }
 
-            if(array_key_exists('ProductID', $response['Result']['Products']['Product'])) {
+            if (array_key_exists('ProductID', $response['Result']['Products']['Product'])) {
                 $articles[] = $response['Result']['Products']['Product'];
-            }
-            else {
+            } else {
                 foreach ($response['Result']['Products']['Product'] as $product) {
                     $articles[] = $product;
                 }
             }
-
-
-        } while($response['Result']['HasMoreProducts'] == '1');
+        } while ($response['Result']['HasMoreProducts'] == '1');
 
         return $articles;
     }
@@ -187,13 +188,12 @@ class ApiClient
             'UserPassword' => $this->afterbuyUserPassword
         ];
 
-        if($shopInterface) {
+        if ($shopInterface) {
             $params['Action'] = $callName;
             $params['PartnerPass'] = $this->afterbuyPartnerPassword;
 
             $request = array_merge($params, $content);
             return http_build_query($request);
-
         }
 
         $params['ErrorLanguage'] = $errorLanguage;
@@ -217,18 +217,16 @@ class ApiClient
         $request = $this->buildRequest('new', $values, true);
         $response = $this->sendRequest($request, true);
 
-        if($response['success'] == '1') {
-            $result = array (
+        if ($response['success'] == '1') {
+            $result = array(
                 'ordernumber' => $response['data']['VID'],
                 'afterbuyId' => $response['data']['AID']
             );
-        }
-        else if(array_key_exists('errorlist', $response)) {
+        } elseif (array_key_exists('errorlist', $response)) {
             $result = array('error' => $response['errorlist']);
         }
 
         return $result;
-
     }
 
     /**
@@ -238,7 +236,7 @@ class ApiClient
      */
     protected function sendRequest($request, $shopInterface = false)
     {
-        if(!$shopInterface) {
+        if (!$shopInterface) {
             $request = $this->serializer->encode($request, 'request/xml');
             $resource = $this->afterbuyAbiUrl;
         } else {
@@ -250,7 +248,7 @@ class ApiClient
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
 
-        if(!$shopInterface) {
+        if (!$shopInterface) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
         }
 
@@ -259,7 +257,7 @@ class ApiClient
         $response = curl_exec($ch);
         curl_close($ch);
 
-        if($this->logger instanceof \Monolog\Logger) {
+        if ($this->logger instanceof Logger) {
             $this->logger->debug('Request', array($request, $response));
         }
 
