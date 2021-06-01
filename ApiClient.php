@@ -278,14 +278,7 @@ class ApiClient
         (in v1.0.3 Zeile 89 auskommentiert)
         */
 
-        $advLogLevel = 3;		// set level manually, because could not read from config at the moment.
-
-        // $this->config = $configReader->getByPluginName($pluginName);
-        // need to add parameters to this function to read $pluginName... How to do this?
-        // maybe add a check, if parameter "advLogLevel" is set correctly in the config, otherwise assign a default value and send an errormessage to the log...
-        // $advLogLevel = $this->config["advLogLevel"];
-
-        if ($advLogLevel >= 1) {
+        if ($this->advLogLevel >= 1) {
             $requestFiltered = preg_replace('/<UserPassword>(.*?)<\/UserPassword>/', '<UserPassword>XXXXXXXX</UserPassword>', $request);				// remove Passwords
             $requestFiltered = preg_replace('/<PartnerPassword>(.*?)<\/PartnerPassword>/', '<PartnerPassword>XXXXXXXX</PartnerPassword>', $requestFiltered);	// remove Passwords
             $requestFiltered = preg_replace('/&UserPassword=(.*?)&Action=/', '&UserPassword=XXXXXXXXXX&Action=', $requestFiltered);					// remove Passwords
@@ -303,24 +296,23 @@ class ApiClient
             if (($xmlResponse->CallStatus == "Success") OR ($xmlResponse->success == "1")) {
                 $needle = "&ArtikelStammID_1=";
                 if (strpos($requestFiltered, $needle) !== false){			// wenn der Request String "&ArtikelStammID=" enthält, handelt es sich um die Übergabe einer Bestellung.
-                    if ($advLogLevel >= 3) {
+                    if ($this->advLogLevel >= 3) {
                         $statusText1 = 'no Error - only info - Exported offer successfully to Afterbuy - ';
                         $this->logger->error($statusText1 . $statusText2, $content);
                     }
                 } else {
-                    if ($advLogLevel >= 4) {
+                    if ($this->advLogLevel >= 4) {
                         $statusText1 = 'no Error - only info - CronJob working correctly - ';
                         $this->logger->error($statusText1 . $statusText2, $content);
                     }
                 }
             } else {									// if no Success in AB-Response...
-                if ($advLogLevel >= 2) {
+                if ($this->advLogLevel >= 2) {
                     $statusText1 = 'ERROR! Check ';
                     $this->logger->error($statusText1 . $statusText2, $content);
                 }
             }
         }
-        // END Advanced Log
 
         return $this->serializer->decode($response, 'response/xml');
     }
@@ -330,6 +322,16 @@ class ApiClient
      * @var int
      */
     protected $logLevel = 1;
+
+    /**
+     * 0 - Alle Debug-Meldungen komplett deaktiviert.
+     * 1 - (Standard) nur Standard-Alive-Meldungen (werden angezeigt als Level "Error", Meldung "No Data recived" und Content "Orders, Read, Internal" -- aktuell ist es komplett deaktiviert / auskommentiert in der ReadOrdersService.php, da Variable in dieser Datei nicht übergeben werden kann)
+     * 2 - Standard-Alive Meldungen deaktiviert, Logging bei Fehlern (nur wenn der Aferbuy Response Success = 0 bzw. der Call-Status nicht successful ist)
+     * 3 - (Empfohlen) Standard-Alive Meldungen deaktiviert, Logging bei Fehlern, sowie Logging von Bestellübergaben an Aferbuy
+     * 4 - Standard-Alive Meldungen deaktiviert, Logging bei Fehlern, Logging von Bestellübergaben an Aferbuy sowie erweiterte Alive-Meldungen, dass der CronJob aktiv ist
+     * @var int
+     */
+    protected $advLogLevel = 3;
 
     /**
      * Filename for logfile
