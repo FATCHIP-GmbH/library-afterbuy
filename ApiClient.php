@@ -261,6 +261,52 @@ class ApiClient
             $this->logger->debug('Request', array($request, $response));
         }
 
+        if ($this->logger instanceof Logger) {
+            // BEGIN Advanced LogLevel  // added 2020-12-07 by XXL-Webdesgin
+            if ($this->advLogLevel >= 1) {
+                $requestFiltered = preg_replace('/<UserPassword>(.*?)<\/UserPassword>/', '<UserPassword>XXXXXXXX</UserPassword>', $request);				// remove Passwords
+                $requestFiltered = preg_replace('/<PartnerPassword>(.*?)<\/PartnerPassword>/', '<PartnerPassword>XXXXXXXX</PartnerPassword>', $requestFiltered);	// remove Passwords
+                $requestFiltered = preg_replace('/&UserPassword=(.*?)&Action=/', '&UserPassword=XXXXXXXXXX&Action=', $requestFiltered);					// remove Passwords
+                $requestFiltered = preg_replace('/&PartnerPass=(.*?)&PosAnz=/', '&PartnerPass=XXXXXXXX&PosAnz=', $requestFiltered);					// remove Passwords
+                $requestFiltered = str_replace(array("\r", "\n", "\t"), '', $requestFiltered);			// removes \n \r \t
+                $requestFiltered = preg_replace("/[\s][\s]*/", " ", $requestFiltered);				// removes double Whitespaces
+                $responseFiltered = str_replace(array("\r", "\n", "\t"), '', $response);			// removes \n \r \t
+                $responseFiltered = preg_replace("/[\s][\s]*/", " ", $responseFiltered);			// removes double Whitespaces
+
+                $statusText1 = '';
+                $statusText2 = 'Request and Response (XML)';
+                $content = array($requestFiltered, $responseFiltered, 'Shop-Doku (Parameter): https://xmldoku.afterbuy.de/shopdoku/', 'XML Doku: https://xmldoku.afterbuy.de/dokued/');
+
+                $xmlResponse = simplexml_load_string($responseFiltered);
+                if (($xmlResponse->CallStatus == "Success") OR ($xmlResponse->success == "1")) {
+                    $needle = "&ArtikelStammID_1=";
+                    if (strpos($requestFiltered, $needle) !== false){			// wenn der Request String "&ArtikelStammID=" enthält, handelt es sich um die Übergabe einer Bestellung.
+                        if ($this->advLogLevel >= 3) {
+                            $statusText1 = 'no Error - only info - Exported offer successfully to Afterbuy - ';
+                            $this->logger->error($statusText1 . $statusText2, $content);
+                        }
+                    } else {
+                        if ($this->advLogLevel >= 4) {
+                            $statusText1 = 'no Error - only info - CronJob working correctly - ';
+                            $this->logger->error($statusText1 . $statusText2, $content);
+                        }
+                    }
+                } else {									// if no Success in AB-Response...
+                    if ($this->advLogLevel >= 2) {
+                        // do not handle as Error "Afterbuy Response on GetSoldItems - No items found"
+                        $needle = "<ErrorCode>15</ErrorCode>";
+                        if (strpos($requestFiltered, $needle) !== false){
+                            $statusText1 = 'no Error - only info - no new sold items found - ';
+                            $this->logger->error($statusText1 . $statusText2, $content);
+                        } else {
+                            $statusText1 = 'ERROR! Check ';
+                            $this->logger->error($statusText1 . $statusText2, $content);
+                        }
+                    }
+                }
+            }
+        }
+        // END Advanced Log
         return $this->serializer->decode($response, 'response/xml');
     }
 
@@ -269,6 +315,16 @@ class ApiClient
      * @var int
      */
     protected $logLevel = 1;
+
+    /**
+     * 0 - Alle Debug-Meldungen komplett deaktiviert.
+     * 1 - (Standard) nur Standard-Alive-Meldungen (werden angezeigt als Level "Error", Meldung "No Data recived" und Content "Orders, Read, Internal")
+     * 2 - Standard-Alive Meldungen deaktiviert, Logging bei Fehlern (nur wenn der Aferbuy Response Success = 0 bzw. der Call-Status nicht successful ist)
+     * 3 - (Empfohlen) Standard-Alive Meldungen deaktiviert, Logging bei Fehlern, sowie Logging von Bestellübergaben an Aferbuy
+     * 4 - Standard-Alive Meldungen deaktiviert, Logging bei Fehlern, Logging von Bestellübergaben an Aferbuy sowie erweiterte Alive-Meldungen, dass der CronJob aktiv ist
+     * @var int
+     */
+    protected $advLogLevel = 3;
 
     /**
      * Filename for logfile
