@@ -247,6 +247,9 @@ class ApiClient
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
+        // workaround for curl error 92 when responses are serverd by HTTP/2
+        // https://github.com/curl/curl/issues/3206
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
         if (!$shopInterface) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
