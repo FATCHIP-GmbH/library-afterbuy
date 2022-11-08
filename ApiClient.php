@@ -283,7 +283,7 @@ class ApiClient
                 $xmlResponse = simplexml_load_string($responseFiltered);
                 if (($xmlResponse->CallStatus == "Success") OR ($xmlResponse->success == "1")) {
                     $needle = "&ArtikelStammID_1=";
-                    if (strpos($requestFiltered, $needle) !== false){			// wenn der Request String "&ArtikelStammID=" enthält, handelt es sich um die Übergabe einer Bestellung.
+                    if (strpos($requestFiltered, $needle) !== false) {            // wenn der Request String "&ArtikelStammID=" enthält, handelt es sich um die Übergabe einer Bestellung.
                         if ($this->advLogLevel >= 3) {
                             $statusText1 = 'no Error - only info - Exported offer successfully to Afterbuy - ';
                             $this->logger->error($statusText1 . $statusText2, $content);
@@ -293,6 +293,11 @@ class ApiClient
                             $statusText1 = 'no Error - only info - CronJob working correctly - ';
                             $this->logger->error($statusText1 . $statusText2, $content);
                         }
+                    }
+                } else if ($xmlResponse->CallStatus == 'Warning') {
+                    if ($this->advLogLevel >= 4) {
+                        $statusText1 = 'WARNING! Check ';
+                        $this->logger->error($statusText1 . $statusText2, $content);
                     }
                 } else {									// if no Success in AB-Response...
                     if ($this->advLogLevel >= 2) {
